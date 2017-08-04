@@ -3,26 +3,52 @@
 
 void usage(const char * input);
 FILE * check_file(char * input);
-void check_file_size(const char * filename);
+int check_file_size(const char * filename);
 int compare_words(const char * a, const char * b);
 
+void find_smallest_file(int argc, char **argv)
+{
+	int size = MAX_WORD_SZ, file_size;
+	int index;
+	for (int x = 1; x < argc; x++)
+	{
+		//USING THE STAT STRUCT
+		if ( size > (file_size = check_file_size(argv[1]) ) )
+		{
+			index = x;
+		}
+	}
+	char * temp;
+	if ( index != 1)
+	{
+		temp = argv[1];
+		argv[1] = argv[index];
+		argv[index] = temp;
+	}
+	
+	for (int i = 0; i < argc; i++)
+	{
+		printf("arg%d: %s\n", i, argv[i]);
+	}
+}
 int main(int argc, char **argv)
 {
 	if (argc < 2)
 		usage(argv[0]);
 	
-	//Initialize the tree array
 	
+	
+	//FIND SMALLEST FILE AND SWAP WITH argv([1])
+	find_smallest_file(argc, argv);
+	
+	//Initialize the tree array
 	Node *root [argc - 1];
 	for ( int x = 0; x < (argc - 1); x++)
 	{
 		root[x] = NULL;
 	}
 	
-	//OLD STUFF
-	//Node *root = NULL;
-	
-	char *match, word [40];
+	char *match, word [MAX_WORD_SZ];
 	int n, file_num = 0;
 	//Files start with 1 
 	for (int file = 1; file < argc; file++)
@@ -65,6 +91,8 @@ int main(int argc, char **argv)
 	}
 }
 
+
+
 int compare_words(const char * a, const char * b)
 {
 	int value = strcasecmp(a, b);
@@ -81,8 +109,7 @@ FILE * check_file( char * filename)
 {
 	FILE * input = fopen(filename, "r");
 	
-	//USING THE STAT STRUCT
-	check_file_size(filename);
+	
 	//printf("checking to open file\n");
 	if( input )
 		return input;
@@ -96,18 +123,21 @@ void usage(const char * input)
 	exit(1);
 }
 
-void check_file_size(const char * filename)
+int  check_file_size(const char * filename)
 {
 	//GET THE SIZE OF THE FILE AND EXIT IF == 0
 	struct stat *buff;
+	int file_size;
 	buff = malloc(sizeof(struct stat));
 	
 	stat(filename, buff);
-	if ( buff->st_size == 0)
+	if ((file_size = buff->st_size) == 0)
 	{
 		printf("The file %s is unreadable or empty\n", filename);
 		free(buff);
 		usage(filename);
 	}
 	free(buff);
+	
+	return file_size;
 }
