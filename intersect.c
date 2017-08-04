@@ -9,11 +9,11 @@ int compare_words(const char * a, const char * b);
 void find_smallest_file(int argc, char **argv)
 {
 	int size = MAX_WORD_SZ, file_size;
-	int index;
+	int index = 1;
 	for (int x = 1; x < argc; x++)
 	{
 		//USING THE STAT STRUCT
-		if ( size > (file_size = check_file_size(argv[1]) ) )
+		if ( size > (file_size = check_file_size(argv[x]) ) )
 		{
 			index = x;
 		}
@@ -25,28 +25,23 @@ void find_smallest_file(int argc, char **argv)
 		argv[1] = argv[index];
 		argv[index] = temp;
 	}
-	
-	for (int i = 0; i < argc; i++)
-	{
-		printf("arg%d: %s\n", i, argv[i]);
-	}
 }
+
 int main(int argc, char **argv)
 {
 	if (argc < 2)
 		usage(argv[0]);
 	
-	
-	
 	//FIND SMALLEST FILE AND SWAP WITH argv([1])
-	find_smallest_file(argc, argv);
 	
+	find_smallest_file(argc, argv);
 	//Initialize the tree array
 	Node *root [argc - 1];
 	for ( int x = 0; x < (argc - 1); x++)
 	{
 		root[x] = NULL;
 	}
+	
 	
 	char *match, word [MAX_WORD_SZ];
 	int n, file_num = 0;
@@ -56,7 +51,7 @@ int main(int argc, char **argv)
 		printf("\nOpening file: %s \n", argv[file]);
 		FILE * input = check_file(argv[file]);
 
-		while ( (n = fscanf(input, "%s", word)) != EOF ) 
+		while ( (n = fscanf(input, "%256s", word)) != EOF ) 
 		{
 			if (file == 1)
 			{
@@ -80,8 +75,10 @@ int main(int argc, char **argv)
 		file_num++;
 	}
 	
-	printf("\nLETS PRINT FINAL BST\n");
+	printf("\nLETS PRINT FINAL BST\n\n");
 	print_in_order(root[file_num - 1]);
+	if ( !root[file_num - 1])
+		printf("There are no matching words in these files!");
 	printf("\n");
 	
 	//DESTROY / FREE The previously used trees!!!
@@ -108,7 +105,6 @@ int compare_words(const char * a, const char * b)
 FILE * check_file( char * filename)
 {
 	FILE * input = fopen(filename, "r");
-	
 	
 	//printf("checking to open file\n");
 	if( input )

@@ -1,4 +1,3 @@
-#include <assert.h>
 #include "avlIntersect.h"
 
 void destroy_tree(Node * t)
@@ -140,9 +139,9 @@ void insert(Node **t, char * key)
 void print_in_order(Node * t)
 {
 	if ( t != NULL)
-	{
+	{ 	
 		print_in_order(t->child[0]);
-		printf("%s ", t->key);
+		printf("[%s]\n", t->key);
 		print_in_order(t->child[1]);
 	}
 }
@@ -152,7 +151,7 @@ void print_reverse_order(Node * t)
 	if ( t != NULL)
 	{
 		print_reverse_order(t->child[1]);
-		printf("%s ", t->key);
+		printf("[%s]\n", t->key);
 		print_reverse_order(t->child[0]);
 	}
 }
