@@ -26,66 +26,35 @@ int get_height(Node * t)
 
 char * search_val(Node * t, char * key, int (*compare)(const char * a, const char * b))
 {
-	//printf("here | t = NULL %c \n", t != NULL ? 'T':'F');
-	//printf("key: %s\nt->key: %s\n", key, t->key);
-	
-	
+	//This function takes a root node, and a key word to search for.
+	//Returns the word that was succesfully matched, else it returns nothing.
 	
 	if ( t == NULL)
-	{	//REached end of search -- Not in the tree;
-		//printf("t = NULL\n");
+	{	//Reached end of search -- Not in the tree;
 		return NULL;
 	}	
-	//printf("\nword: [%s]\n", key);
-	//printf("match: [%s]\n\n", t->key);
+	
+	//If there are leaf nodes remaining to search.
 	int order = compare(key, t->key);
-	//printf("order = %d \n", order);
+	
+	//If compare function returns as equal (-1)
 	if ( order < 0)
 	{
 		//printf("return: %s\n", key);
 		return t->key; //return the char * ???
 	}
+	//Else the compare function returns either greater than (1) or less than (0).
 	else 
 	{
-		//printf("return: t->key = %s| key = %s\n", t->key, key);
-		//If the strcasecmp returns a positive number.
 		return search_val(t->child[order], key, compare);
 	}
 }
-
-Node * search_node(Node * t, char * key)
-{
-		int order = strcasecmp(key, t->key);
-		if (!order)
-		{
-			return t;
-		}
-		else if (order > 0) //Use the compare function
-		{
-			search_node(t->child[0], key);
-		}
-		else if (order < 0)
-		{
-			search_node(t->child[1], key);
-		}
-		else
-			return NULL;
-}
-
 
 void adjust_height(Node * t)
 {
 	//Double check and adjust
 	if(t != NULL)
 		t->height = 1 + Max(get_height(t->child[0]), get_height(t->child[1]));
-		
-	/* 
-	OLD STUFF
-	if(t != NULL);
-	
-	t->height = 1 + Max(get_height(t->child[0]), get_height(t->child[1]));
-	*/
-	
 }
 
 void rotate(Node ** root, int d)
@@ -145,17 +114,13 @@ void insert(Node **t, char * key)
 			fprintf(stderr, "Memory error\n");
 			return;
 		}
-		/* 
-		OLD STUFF
-		assert(*t); //Assumes malloc worked. -> insert appropriate checks
-		*/
+		
 		(*t)->child[0] = NULL;
 		(*t)->child[1] = NULL;
 		
-		
+		//Insert the word into a new BST.
 		(*t)->key = malloc(MAX_WORD_SZ);
 		strcpy((*t)->key, key);
-		//printf("The inserted word is [%s]\n", (*t)->key);
 		(*t)->height = 1;
 		
 		return;
@@ -201,7 +166,7 @@ void check(Node * root)
 		{
 			check(root->child[i]);
 		}
-		assert(root->height == 1 + Max(get_height(root->child[0]), get_height(root->child[1])));
+		root->height == 1 + Max(get_height(root->child[0]), get_height(root->child[1]));
 	}
 }
 

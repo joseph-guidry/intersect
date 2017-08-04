@@ -13,7 +13,6 @@ typedef struct Node {
 
 void destroy_tree(Node * t);
 int get_height(Node * t);
-//char * search_val(Node * t, char * key);
 char * search_val(Node * t, char * key, int (*compare)(const char * a, const char * b));
 
 void adjust_height(Node * t);
