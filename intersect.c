@@ -106,6 +106,12 @@ FILE * check_file( char * filename)
 {
 	FILE * input = fopen(filename, "r");
 	
+	if ( !input)
+	{
+		fprintf(stderr, "Failed to open %s\n", filename);
+		exit(2);
+	}
+	
 	//printf("checking to open file\n");
 	if( input )
 		return input;
