@@ -60,7 +60,6 @@ int main(int argc, char **argv)
 	//DESTROY / FREE The previously used trees!!!
 	for ( int x = 0; x < argc - 1; x++)
 	{
-		printf("destroying root[%d]\n", x);
 		destroy_tree(root[x]);
 	}
 }
@@ -130,9 +129,9 @@ int  check_file_size(const char * filename)
 	stat(filename, buff);
 	if ((file_size = buff->st_size) == 0)
 	{
-		printf("The file %s is unreadable or empty\n", filename);
+		fprintf(stderr, "The file [%s] is unreadable or empty\n", filename);
 		free(buff);
-		usage(filename);
+		exit(2);
 	}
 	free(buff);
 	
