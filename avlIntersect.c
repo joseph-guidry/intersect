@@ -39,8 +39,7 @@ char * search_val(Node * t, char * key, int (*compare)(const char * a, const cha
 	//If compare function returns as equal (-1)
 	if ( order < 0)
 	{
-		//printf("return: %s\n", key);
-		return t->key; //return the char * ???
+		return t->key; 
 	}
 	//Else the compare function returns either greater than (1) or less than (0).
 	else 
@@ -58,6 +57,7 @@ void adjust_height(Node * t)
 
 void rotate(Node ** root, int d)
 {
+	//Implemenation of AVL tree rotation that picks the direction based on the data it receives from rebalance().
 	Node * oldRoot;
 	Node * newRoot;
 	Node * oldMiddle;
@@ -77,6 +77,7 @@ void rotate(Node ** root, int d)
 
 void rebalance(Node **t)
 {
+	//Checks the height of the nodes in the tree, will rotate if required in the appropriate direction.
 	int d;
 	
 	if (*t != NULL)

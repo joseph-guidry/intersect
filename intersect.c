@@ -5,27 +5,7 @@ void usage(const char * input);
 FILE * check_file(char * input);
 int check_file_size(const char * filename);
 int compare_words(const char * a, const char * b);
-
-void find_smallest_file(int argc, char **argv)
-{
-	int size = MAX_WORD_SZ, file_size;
-	int index = 1;
-	for (int x = 1; x < argc; x++)
-	{
-		//USING THE STAT STRUCT
-		if ( size > (file_size = check_file_size(argv[x]) ) )
-		{
-			index = x;
-		}
-	}
-	char * temp;
-	if ( index != 1)
-	{
-		temp = argv[1];
-		argv[1] = argv[index];
-		argv[index] = temp;
-	}
-}
+void find_smallest_file(int argc, char **argv);
 
 int main(int argc, char **argv)
 {
@@ -33,15 +13,14 @@ int main(int argc, char **argv)
 		usage(argv[0]);
 	
 	//FIND SMALLEST FILE AND SWAP WITH argv([1])
-	
 	find_smallest_file(argc, argv);
+	
 	//Initialize the tree array
 	Node *root [argc - 1];
 	for ( int x = 0; x < (argc - 1); x++)
 	{
 		root[x] = NULL;
 	}
-	
 	
 	char *match, word [MAX_WORD_SZ];
 	int n, file_num = 0;
@@ -68,11 +47,9 @@ int main(int argc, char **argv)
 				}
 			}
 		}
-	
-		//IF statement to destroy tree if
-		//printf("\nend of file: [%d][%d]\n", file, argc);
 		fclose(input);
 		file_num++;
+
 	}
 	
 	printf("\nLETS PRINT FINAL BST\n\n");
@@ -80,15 +57,34 @@ int main(int argc, char **argv)
 	if ( !root[file_num - 1])
 		printf("There are no matching words in these files!");
 	printf("\n");
-	
 	//DESTROY / FREE The previously used trees!!!
 	for ( int x = 0; x < argc - 1; x++)
 	{
+		printf("destroying root[%d]\n", x);
 		destroy_tree(root[x]);
 	}
 }
 
-
+void find_smallest_file(int argc, char **argv)
+{
+	int size = MAX_WORD_SZ, file_size;
+	int index = 1;
+	for (int x = 1; x < argc; x++)
+	{
+		//USING THE STAT STRUCT
+		if ( size > (file_size = check_file_size(argv[x]) ) )
+		{
+			index = x;
+		}
+	}
+	char * temp;
+	if ( index != 1)
+	{
+		temp = argv[1];
+		argv[1] = argv[index];
+		argv[index] = temp;
+	}
+}
 
 int compare_words(const char * a, const char * b)
 {
@@ -111,7 +107,6 @@ FILE * check_file( char * filename)
 		fprintf(stderr, "Failed to open %s\n", filename);
 		exit(2);
 	}
-	
 	//printf("checking to open file\n");
 	if( input )
 		return input;
